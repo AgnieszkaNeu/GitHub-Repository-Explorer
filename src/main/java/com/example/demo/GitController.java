@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import com.example.demo.Entity.Repository;
+import com.example.demo.Services.RepositoryService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,26 +12,15 @@ import java.util.List;
 @RestController
 public class GitController {
 
-    public ExtractData extractData;
-    public GithubApiService githubApiService;
+    public RepositoryService repositoryService;
 
-    public GitController(ExtractData extractData, GithubApiService githubApiService) {
-        this.extractData = extractData;
-        this.githubApiService = githubApiService;
+    public GitController(RepositoryService repositoryService) {
+        this.repositoryService = repositoryService;
     }
 
     @GetMapping()
-    public List<Repository> getRepositoriesForUser (@RequestParam String username){
-
-        githubApiService.getUser(username);
-
-        List<Repository> data = extractData.extractRepositories(username);
-
-        data.forEach(
-                repository -> repository.setBranches(extractData.extractBranchFromResponse(username, repository.getName()))
-        );
-
-        return data;
+    public ResponseEntity<List<Repository>> getRepositoriesForUser (@RequestParam String username){
+        return ResponseEntity.ok().body(repositoryService.getRepositoryWithBranches(username));
     }
 
 }
