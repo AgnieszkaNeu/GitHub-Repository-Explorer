@@ -2,6 +2,7 @@ package com.example.demo.Services;
 
 import com.example.demo.Entity.GithubApiBranch;
 import com.example.demo.Entity.GithubApiRepository;
+import com.example.demo.Exceptions.GithubApiException;
 import com.example.demo.Exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -27,19 +28,24 @@ public class GithubApiService {
     public void checkIfUserExists(String username){
         String request = API_GITHUB_COM + "/users/" + username;
         restClient.get()
-                            .uri(request)
-                            .retrieve()
-                            .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {
-                                throw new UserNotFoundException(username);
-                            });
+                    .uri(request)
+                    .header("Authorization", "Bearer " + token)
+                    .retrieve()
+                    .onStatus(HttpStatusCode::isError, (req, res) -> {
+                        throw new UserNotFoundException(username);
+                    }).toBodilessEntity();
     }
 
     public List<GithubApiRepository> getUserRepositories(String username){
         String request = API_GITHUB_COM + "/users/" + username + "/repos";
         return restClient.get()
                 .uri(request)
+                .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
+                .onStatus(HttpStatusCode::isError, (req,res) -> {
+                    throw new GithubApiException(res.getStatusText());
+                })
                 .body(new ParameterizedTypeReference<>() {});
     }
 
@@ -47,7 +53,7 @@ public class GithubApiService {
         String request = API_GITHUB_COM + "/repos/" + owner + "/" + repo + "/branches";
         return restClient.get()
                 .uri(request)
-                .header("Authorization", token)
+                .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(new ParameterizedTypeReference<>() {});
