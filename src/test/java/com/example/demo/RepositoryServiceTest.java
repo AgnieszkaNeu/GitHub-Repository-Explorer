@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.Entity.Branch;
 import com.example.demo.Entity.GithubApiBranch;
 import com.example.demo.Entity.GithubApiCommit;
 import com.example.demo.Entity.GithubApiRepository;
