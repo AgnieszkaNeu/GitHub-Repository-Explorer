@@ -4,6 +4,6 @@ import java.util.List;
 
 public record Repository(
         String login,
-        String name,
+        String repositoryName,
         List<Branch> branches
 ){ }
