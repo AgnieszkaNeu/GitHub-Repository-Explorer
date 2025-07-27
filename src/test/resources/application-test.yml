@@ -1,0 +1,3 @@
+github:
+  api-url: http://localhost:${wiremock.server.port}
+  token: dummy-token
