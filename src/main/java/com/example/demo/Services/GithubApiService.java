@@ -16,7 +16,8 @@ import java.util.List;
 @Service
 public class GithubApiService {
 
-    private final static String API_GITHUB_COM = "https://api.github.com";
+    @Value("${github.api-url:https://api.github.com}")
+    private String API_GITHUB_COM = "https://api.github.com";
     @Value("${github.token}")
     private String token;
     private final RestClient restClient;
