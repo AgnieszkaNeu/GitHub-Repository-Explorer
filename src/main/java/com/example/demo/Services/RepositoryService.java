@@ -5,7 +5,6 @@ import com.example.demo.Entity.GithubApiBranch;
 import com.example.demo.Entity.GithubApiRepository;
 import com.example.demo.Entity.Repository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -20,12 +19,12 @@ public class RepositoryService {
     public List<Repository> getRepositoryWithBranches(String username){
         githubApiService.checkIfUserExists(username);
 
-        List<GithubApiRepository> GithubApiRepositories = githubApiService.getUserRepositories(username)
+        List<GithubApiRepository> githubApiRepositories = githubApiService.getUserRepositories(username)
                                                         .stream()
                                                         .filter(repo -> !repo.fork())
                                                         .toList();
 
-        return GithubApiRepositories.stream()
+        return githubApiRepositories.stream()
                 .map(repo -> {
                     List<GithubApiBranch> githubApiBranches = githubApiService.getBranch(username,repo.name());
                     List<Branch> branches = githubApiBranches.stream().map(branch -> new Branch(branch.name(),branch.commit().sha()))
