@@ -1,6 +1,6 @@
 # GitHub Repo API
 
-A Spring Boot application used to fetch a GitHub user's public repositories.
+A Spring Boot application that fetches a GitHub user's public repositories (excluding forks) along with the names of their branches and the latest commit SHA for each branch.
 
 ## GitHub token
 
@@ -12,6 +12,7 @@ In the `application.properties` file, you need to provide your personal GitHub t
 
 Returns a list of the user's public repositories (excluding forks), in the following format:
 
+✅Successful Response (HTTP 200)
 ```json
 [
   {
@@ -32,3 +33,10 @@ Returns a list of the user's public repositories (excluding forks), in the follo
 ]
 ```
 
+❌Error Response (User Not Found – HTTP 404)
+```json
+{
+  "status": 404,
+  "message": "User not found: {username}"
+}
+```
