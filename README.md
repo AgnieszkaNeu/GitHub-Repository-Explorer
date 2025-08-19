@@ -1,4 +1,4 @@
-# GitHub Repo API
+# GitHub Repository Explorer
 
 A Spring Boot application that fetches a GitHub user's public repositories (excluding forks) along with the names of their branches and the latest commit SHA for each branch.
 
